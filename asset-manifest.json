@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/ibwebsite/static/css/main.b01792f2.css",
+    "main.js": "/ibwebsite/static/js/main.71fc9f4b.js",
+    "static/js/453.513d4d72.chunk.js": "/ibwebsite/static/js/453.513d4d72.chunk.js",
+    "static/media/img3.jpg": "/ibwebsite/static/media/img3.cdaf5888a2cd146853f7.jpg",
+    "static/media/img2.jpg": "/ibwebsite/static/media/img2.91d687f7a024c908df92.jpg",
+    "static/media/Bg1.jpg": "/ibwebsite/static/media/Bg1.8eca9e10b2ca6e1109ba.jpg",
+    "static/media/logo1.svg": "/ibwebsite/static/media/logo1.6f13509c9d4ad11cb523c6d1a6db8148.svg",
+    "index.html": "/ibwebsite/index.html",
+    "main.b01792f2.css.map": "/ibwebsite/static/css/main.b01792f2.css.map",
+    "main.71fc9f4b.js.map": "/ibwebsite/static/js/main.71fc9f4b.js.map",
+    "453.513d4d72.chunk.js.map": "/ibwebsite/static/js/453.513d4d72.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b01792f2.css",
+    "static/js/main.71fc9f4b.js"
+  ]
+}
