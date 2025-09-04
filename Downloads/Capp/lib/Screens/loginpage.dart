@@ -167,6 +167,7 @@ if (!_formKey.currentState!.validate()) {
                         style: TextStyle( fontFamily: 'Poppins',
                            fontWeight: FontWeight.w700,
                                 fontSize: 24,
+                               
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -248,7 +249,9 @@ if (!_formKey.currentState!.validate()) {
                                     _showPasswordField ? "Login" : "Next",
                                     style: TextStyle( fontFamily: 'Poppins',
                            fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                           
+                                fontSize: 18,
+                                color: Colors.white,
                                ),
                                   ),
                                 ),

@@ -451,12 +451,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ironingboy/Screens/widgets/addresspage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ironingboy/Screens/widgets/personalinfo.dart';
-import 'package:ironingboy/Screens/locationpage.dart';
 import 'package:ironingboy/Screens/widgets/referandearn.dart';
-
-// Use a separate stateless widget for the ProfileScreen list item
 class _ProfileTile extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -530,7 +528,7 @@ class ProfileScreen extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => LocationManagerPage()),
+                MaterialPageRoute(builder: (_) => AddressListPage()),
               );
             },
           ),
@@ -548,17 +546,17 @@ class ProfileScreen extends StatelessWidget {
             icon: Icons.people_outline,
             title: "Refer and Earn",
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ReferEarnPage()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (_) => const ReferEarnPage()),
+              // );
             },
           ),
           _ProfileTile(
             icon: Icons.settings_outlined,
             title: "App Settings",
             onTap: () {
-              // Navigate to App Settings screen
+              
             },
           ),
         ],
@@ -842,7 +840,7 @@ class _ContactSupportSection extends StatelessWidget {
   const _ContactSupportSection();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

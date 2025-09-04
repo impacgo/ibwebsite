@@ -24,6 +24,7 @@ class Signupscreen {
       if (data['success'] == true){
           final prefs = await SharedPreferences.getInstance();
          await prefs.setString('jwtToken', data['token']);
+        await prefs.setBool("isLoggedIn", true);
         return SignupResult(success: true, message: "Success");
       }else{ 
         return SignupResult( 

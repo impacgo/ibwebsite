@@ -26,6 +26,7 @@ class Productscreen {
           "id": item["id"] ?? "null",
           "name": item["name"],
           "price": item["price"],
+         "emoji": item["emoji"] ?? "🧺",
         }).toList();
       }
       throw Exception("Unexpected response format: ${response.body}");

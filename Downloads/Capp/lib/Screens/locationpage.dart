@@ -15,7 +15,7 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationManagerPage extends StatefulWidget {
-  const LocationManagerPage({super.key});
+  const LocationManagerPage({super.key, });
 
   @override
   State<LocationManagerPage> createState() => _LocationManagerPageState();

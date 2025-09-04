@@ -233,6 +233,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         context,
                         MaterialPageRoute(builder: (_) => Loginpage()),
                         (route) => false,
+                  
                       );
                     },
                   ),
@@ -255,4 +256,5 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     );
   }
 }
+
 

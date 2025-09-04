@@ -5,7 +5,10 @@ class MyOrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("My Orders"),
+      ),
       body: Center(
         child: Text("📦 My Orders",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),

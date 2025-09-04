@@ -19,6 +19,7 @@ class Loginscreen{
       if (response.statusCode == 200 && data['success'] == true) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwtToken', data['token']);
+      await prefs.setBool("isLoggedIn", true);
     }
       
       return {
@@ -114,8 +115,8 @@ String _determineIdentifierType(String identifier) {
       final data = json.decode(response.body);
        if (response.statusCode == 200 && data['success'] == true) {
       final prefs = await SharedPreferences.getInstance();
-    
       await prefs.setString('jwtToken', data['token']);
+      await prefs.setBool("isLoggedIn", true);
     }
     
       return {
