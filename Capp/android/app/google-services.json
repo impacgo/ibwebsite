@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "310559490686",
+    "project_id": "laundrymanagement-f17c9",
+    "storage_bucket": "laundrymanagement-f17c9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310559490686:android:3e7e9c30a203d979930e2f",
+        "android_client_info": {
+          "package_name": "com.example.ironingboy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310559490686-frj6s5cbec49bj1qb5eko0iiv92i89lr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ironingboy",
+            "certificate_hash": "b9c8052a9c79a12e0f4a774c18cf2c8c9e4e1b42"
+          }
+        },
+        {
+          "client_id": "310559490686-22117vgg9sv08gb4ch8e89ou61hq089b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnXa6uf-3ww7dpL3QwQLyLodkuAinw80Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310559490686-22117vgg9sv08gb4ch8e89ou61hq089b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "310559490686-13gisoobaaghq6i4laabomlme86e5p0g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ironingboy"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
