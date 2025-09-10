@@ -1,19 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart'; 
 import 'commonbaseurl.dart';
 class Productscreen {  
   static Future<List<Map<String, dynamic>>> fetchProducts(int categoryId) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('jwtToken'); 
-    if (token == null) {
-      throw Exception("No token found. Please login again.");
-    }
+    // final prefs = await SharedPreferences.getInstance();
+    // final token = prefs.getString('jwtToken'); 
+    // if (token == null) {
+    //   throw Exception("No token found. Please login again.");
+    // }
     final response = await http.get(
       Uri.parse("${base.baseUrl}/products?categoryId=$categoryId"),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
+        // "Authorization": "Bearer $token",
       },
     );
     if (response.statusCode == 200) {

@@ -5,7 +5,8 @@ import 'package:ironingboy/Screens/cartextra.dart';
 import 'package:ironingboy/Screens/cartitem.dart';
 
 
-// Events
+// Events     Stripe.publishableKey =
+     // 'pk_test_51S3E4YCaf76ntwTVeWFgmkQ36JR8AiiKCchLX9yrB9svrJzLbmC6ZrOgDWRY8rtpXnjxLMpYp7n466LPUuHWr71u00ZqU89aAn';
 abstract class CartEvent {}
 class ClearCart extends CartEvent {}
 

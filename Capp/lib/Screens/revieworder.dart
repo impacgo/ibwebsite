@@ -386,109 +386,235 @@ class _ReviewOrderPageState extends State<ReviewOrderPage> {
                             ),
                   const SizedBox(height: 30),
                   SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                      onPressed: () async {
-                        if (_selectedAddressId == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Please select an address first")),
-                          );
-                          return;
-                        }
+  width: double.infinity,
+  child: ElevatedButton(
+    onPressed: () async {
+      if (_selectedAddressId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please select an address first")),
+        );
+        return;
+      }
 
-                        final prefs = await SharedPreferences.getInstance();
-                        final token = prefs.getString('jwtToken');
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('jwtToken');
 
-                        if (token == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Not authenticated")),
-                          );
-                          return;
-                        }
+      if (token == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Not authenticated")),
+        );
+        return;
+      }
 
-                        final selectedAddress = _savedAddresses.firstWhere(
-                          (addr) => _toInt(addr['address_id']) == _selectedAddressId,
-                          orElse: () => {},
-                        );
+      final selectedAddress = _savedAddresses.firstWhere(
+        (addr) => _toInt(addr['address_id']) == _selectedAddressId,
+        orElse: () => {},
+      );
 
-                        if (selectedAddress is! Map<String, dynamic> || _toInt(selectedAddress['address_id']) == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Selected address not found. Please reselect.")),
-                          );
-                          return;
-                        }
+      if (selectedAddress is! Map<String, dynamic> || _toInt(selectedAddress['address_id']) == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Selected address not found. Please reselect.")),
+        );
+        return;
+      }
 
-                        final cartExtraState = context.read<CartExtraBloc>().state;
-                        final notes = cartExtraState.notes;
-                        final images = cartExtraState.imagePaths;
+      final cartExtraState = context.read<CartExtraBloc>().state;
+      final notes = cartExtraState.notes;
+      final images = cartExtraState.imagePaths;
 
-                        final itemsPayload = items.map((e) => {
-                              "product_id": e.id,
-                              "quantity": e.qty,
-                              "price_at_purchase": e.price,
-                            }).toList();
+      final itemsPayload = items.map((e) => {
+            "product_id": e.id,
+            "quantity": e.qty,
+            "price_at_purchase": e.price,
+          }).toList();
 
-                        final orderPayload = {
-                          "address_id": _toInt(selectedAddress['address_id']),
-                          "items": itemsPayload,
-                          "subtotal": subtotal,
-                          "tip": widget.tip ?? 0,
-                          "total": total,
-                          "collect_slot": widget.collect,
-                          "delivery_slot": widget.delivery,
-                          "notes": notes,
-                          "images": images,
-                        };
+      final orderPayload = {
+        "address_id": _toInt(selectedAddress['address_id']),
+        "items": itemsPayload,
+        "subtotal": subtotal,
+        "tip": widget.tip ?? 0,
+        "total": total,
+        "collect_slot": widget.collect,
+        "delivery_slot": widget.delivery,
+        "notes": notes,
+        "images": images,
+      };
 
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) => const Center(child: CircularProgressIndicator()),
-                        );
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(child: CircularProgressIndicator()),
+      );
 
-                        try {
-                          final response = await http.post(
-                            Uri.parse('${base.baseUrl}/orders'),
-                            headers: {
-                              'Content-Type': 'application/json',
-                              'Authorization': 'Bearer $token',
-                            },
-                            body: json.encode(orderPayload),
-                          );
+      try {
+        final response = await http.post(
+          Uri.parse('${base.baseUrl}/orders'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode(orderPayload),
+        );
 
-                          Navigator.of(context).pop();
+        Navigator.of(context).pop();
 
-                          if (response.statusCode == 201) {
-                            context.read<CartBloc>().add(ClearCart());
-                            context.read<CartExtraBloc>().add(ClearExtras());
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => PaymentScreen(amount: total)),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Failed to create order: ${response.body}")),
-                            );
-                          }
-                        } catch (e) {
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Error placing order: $e")),
-                          );
-                        }
-                      },
-                      child: const Text(
-                        "Confirm Order",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600, fontFamily: "Poppins", color: Colors.white),
-                      ),
-                    ),
-                  ),
+        if (response.statusCode == 201) {
+          context.read<CartBloc>().add(ClearCart());
+          context.read<CartExtraBloc>().add(ClearExtras());
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => PaymentScreen(amount: total)),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Failed to create order: ${response.body}")),
+          );
+        }
+      } catch (e) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error placing order: $e")),
+        );
+      }
+    },
+    style: ElevatedButton.styleFrom(
+      padding: EdgeInsets.zero, // 🔑 remove default padding
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      backgroundColor: Colors.transparent, // 🔑 transparent to show gradient
+      shadowColor: Colors.transparent,
+    ),
+    child: Ink(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFF8B500), Color(0xFFF57C00)],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: const Text(
+          "Confirm Order",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Poppins",
+            color: Colors.white,
+          ),
+        ),
+      ),
+    ),
+  ),
+),
+
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   child: ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(
+                  //       backgroundColor: Colors.orange,
+                  //       padding: const EdgeInsets.symmetric(vertical: 16),
+                  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  //     ),
+                  //     onPressed: () async {
+                  //       if (_selectedAddressId == null) {
+                  //         ScaffoldMessenger.of(context).showSnackBar(
+                  //           const SnackBar(content: Text("Please select an address first")),
+                  //         );
+                  //         return;
+                  //       }
+
+                  //       final prefs = await SharedPreferences.getInstance();
+                  //       final token = prefs.getString('jwtToken');
+
+                  //       if (token == null) {
+                  //         ScaffoldMessenger.of(context).showSnackBar(
+                  //           const SnackBar(content: Text("Not authenticated")),
+                  //         );
+                  //         return;
+                  //       }
+
+                  //       final selectedAddress = _savedAddresses.firstWhere(
+                  //         (addr) => _toInt(addr['address_id']) == _selectedAddressId,
+                  //         orElse: () => {},
+                  //       );
+
+                  //       if (selectedAddress is! Map<String, dynamic> || _toInt(selectedAddress['address_id']) == null) {
+                  //         ScaffoldMessenger.of(context).showSnackBar(
+                  //           const SnackBar(content: Text("Selected address not found. Please reselect.")),
+                  //         );
+                  //         return;
+                  //       }
+
+                  //       final cartExtraState = context.read<CartExtraBloc>().state;
+                  //       final notes = cartExtraState.notes;
+                  //       final images = cartExtraState.imagePaths;
+
+                  //       final itemsPayload = items.map((e) => {
+                  //             "product_id": e.id,
+                  //             "quantity": e.qty,
+                  //             "price_at_purchase": e.price,
+                  //           }).toList();
+
+                  //       final orderPayload = {
+                  //         "address_id": _toInt(selectedAddress['address_id']),
+                  //         "items": itemsPayload,
+                  //         "subtotal": subtotal,
+                  //         "tip": widget.tip ?? 0,
+                  //         "total": total,
+                  //         "collect_slot": widget.collect,
+                  //         "delivery_slot": widget.delivery,
+                  //         "notes": notes,
+                  //         "images": images,
+                  //       };
+
+                  //       showDialog(
+                  //         context: context,
+                  //         barrierDismissible: false,
+                  //         builder: (_) => const Center(child: CircularProgressIndicator()),
+                  //       );
+
+                  //       try {
+                  //         final response = await http.post(
+                  //           Uri.parse('${base.baseUrl}/orders'),
+                  //           headers: {
+                  //             'Content-Type': 'application/json',
+                  //             'Authorization': 'Bearer $token',
+                  //           },
+                  //           body: json.encode(orderPayload),
+                  //         );
+
+                  //         Navigator.of(context).pop();
+
+                  //         if (response.statusCode == 201) {
+                  //           context.read<CartBloc>().add(ClearCart());
+                  //           context.read<CartExtraBloc>().add(ClearExtras());
+                  //           Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(builder: (_) => PaymentScreen(amount: total)),
+                  //           );
+                  //         } else {
+                  //           ScaffoldMessenger.of(context).showSnackBar(
+                  //             SnackBar(content: Text("Failed to create order: ${response.body}")),
+                  //           );
+                  //         }
+                  //       } catch (e) {
+                  //         Navigator.of(context).pop();
+                  //         ScaffoldMessenger.of(context).showSnackBar(
+                  //           SnackBar(content: Text("Error placing order: $e")),
+                  //         );
+                  //       }
+                  //     },
+                  //     child: const Text(
+                  //       "Confirm Order",
+                  //       style: TextStyle(
+                  //           fontSize: 16, fontWeight: FontWeight.w600, fontFamily: "Poppins", color: Colors.white),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             );

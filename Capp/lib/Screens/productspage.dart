@@ -82,7 +82,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       Expanded(child: _buildProductList()),
                     ],
                   ),
-
                   if (_isFabBarVisible)
                     AnimatedPositioned(
                       duration: const Duration(milliseconds: 300),
@@ -201,51 +200,152 @@ class _ProductListScreenState extends State<ProductListScreen> {
       ),
     );
   }
+  // Widget _buildAddButton(Map<String, dynamic> product) {
+  //   return BlocBuilder<CartBloc, CartState>(
+  //     builder: (context, state) {
+  //       final isAdded = state is CartUpdated &&
+  //           state.items.any((item) => item.id == product["id"]);
+  //       return InkWell(
+  //         borderRadius: BorderRadius.circular(12),
+  //         onTap: () {
+  //           if (!isAdded) {
+  //             context.read<CartBloc>().add(
+  //                   AddToCart(
+  //                     CartItem(
+  //                       id: product["id"] as int,
+  //                       name: product["name"] as String,
+  //                       price: double.parse(product["price"].toString()),
+  //                       qty: 1,
+  //                     ),
+  //                   ),
+  //                 );
+  //             setState(() {
+  //               _isFabBarVisible = true; 
+  //             });
+  //           }
+  //         },
+  //         child: Container(
+  //           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  //           decoration: BoxDecoration(
+  //             color: isAdded ? Colors.green : Colors.orange,
+  //             borderRadius: BorderRadius.circular(12),
+  //           ),
+  //           child: Text(
+  //             isAdded ? "ADDED ✓" : "ADD +",
+  //             style: const TextStyle(
+  //               color: Colors.white,
+  //               fontFamily: 'Poppins',
+  //               fontWeight: FontWeight.w600,
+  //               fontSize: 12,
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
   Widget _buildAddButton(Map<String, dynamic> product) {
-    return BlocBuilder<CartBloc, CartState>(
-      builder: (context, state) {
-        final isAdded = state is CartUpdated &&
-            state.items.any((item) => item.id == product["id"]);
-        return InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: () {
-            if (!isAdded) {
-              context.read<CartBloc>().add(
-                    AddToCart(
-                      CartItem(
-                        id: product["id"] as int,
-                        name: product["name"] as String,
-                        price: double.parse(product["price"].toString()),
-                        qty: 1,
-                      ),
-                    ),
-                  );
-              setState(() {
-                _isFabBarVisible = true; 
-              });
-            }
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: isAdded ? Colors.green : Colors.orange,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              isAdded ? "ADDED ✓" : "ADD +",
-              style: const TextStyle(
-                color: Colors.white,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
+  return BlocBuilder<CartBloc, CartState>(
+    builder: (context, state) {
+      if (state is CartUpdated) {
+        final existingItem = state.items.firstWhere(
+          (item) => item.id == product["id"],
+          orElse: () => CartItem(id: -1, name: "", price: 0, qty: 0),
+        );
+
+        if (existingItem.id != -1) {
+          // ✅ Already in cart → Show qty control
+          return Row(
+            children: [
+              // Decrement button
+              InkWell(
+                onTap: () {
+                  int newQty = existingItem.qty - 1;
+                  context
+                      .read<CartBloc>()
+                      .add(UpdateQuantity(existingItem, newQty));
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.remove, color: Colors.white, size: 18),
+                ),
               ),
+
+              // Quantity display
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  existingItem.qty.toString(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+
+              // Increment button
+              InkWell(
+                onTap: () {
+                  int newQty = existingItem.qty + 1;
+                  context
+                      .read<CartBloc>()
+                      .add(UpdateQuantity(existingItem, newQty));
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.add, color: Colors.white, size: 18),
+                ),
+              ),
+            ],
+          );
+        }
+      }
+      return InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          context.read<CartBloc>().add(
+                AddToCart(
+                  CartItem(
+                    id: product["id"] as int,
+                    name: product["name"] as String,
+                    price: double.parse(product["price"].toString()),
+                    qty: 1,
+                  ),
+                ),
+              );
+          setState(() {
+            _isFabBarVisible = true;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.orange,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Text(
+            "ADD +",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
             ),
           ),
-        );
-      },
-    );
-  }
-
+        ),
+      );
+    },
+  );
+}
   Widget _buildCartFAB() {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {

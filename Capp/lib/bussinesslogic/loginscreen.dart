@@ -20,6 +20,7 @@ class Loginscreen{
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwtToken', data['token']);
       await prefs.setBool("isLoggedIn", true);
+    //  Navigator.pop(context, true);
     }
       
       return {
@@ -39,6 +40,7 @@ class Loginscreen{
       body: jsonEncode({'identifier': identifier}),
     );
     if (response.statusCode >= 200 && response.statusCode < 300) {
+    
       if (response.body.isEmpty) {
         return {
           'exists': false,

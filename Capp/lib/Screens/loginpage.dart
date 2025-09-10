@@ -10,6 +10,7 @@ class Loginpage extends StatefulWidget {
   State<Loginpage> createState() => _LoginpageState();
 }
 class _LoginpageState extends State<Loginpage> {
+   bool _isPasswordVisible = false;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _identifierController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -200,29 +201,42 @@ if (!_formKey.currentState!.validate()) {
 
                       if (_showPasswordField) ...[
                         const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          focusNode: _passwordFocusNode,
-                          decoration: InputDecoration(
-                            hintText: 'Enter Your Password',
-                            hintStyle: TextStyle( fontFamily: 'Poppins',
-                           fontWeight: FontWeight.normal,
-                                fontSize: 12,
-                               ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.black, width: 2),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            fillColor: Colors.grey[200],
-                            filled: true,
-                            prefixIcon: const Icon(Icons.lock_outline),
-                          ),
-                        ),
+                       
+
+TextFormField(
+  controller: _passwordController,
+  obscureText: !_isPasswordVisible,
+  focusNode: _passwordFocusNode,
+  decoration: InputDecoration(
+    hintText: 'Enter Your Password',
+    hintStyle: const TextStyle(
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.normal,
+      fontSize: 12,
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.black, width: 2),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    fillColor: Colors.grey[200],
+    filled: true,
+    prefixIcon: const Icon(Icons.lock_outline),
+    suffixIcon: IconButton(
+      icon: Icon(
+        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+      ),
+      onPressed: () {
+        setState(() {
+          _isPasswordVisible = !_isPasswordVisible;
+        });
+      },
+    ),
+  ),
+),
+
                       ],
 
                       const SizedBox(height: 20),

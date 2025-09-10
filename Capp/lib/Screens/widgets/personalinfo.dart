@@ -239,22 +239,59 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: () {
-                 
-                    },
-                    child: const Text(
-                      'Delete My Account',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+  onPressed: () async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('jwtToken');
+
+    if (token == null) return;
+
+    final url = Uri.parse('${base.baseUrl}/profile');
+    final response = await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // ✅ Clear local storage
+      await prefs.clear();
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Account deleted successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // ✅ Navigate to login
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => Loginpage()),
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to delete account'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  },
+  child: const Text(
+    'Delete My Account',
+    style: TextStyle(
+      color: Colors.red,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+),                  
                 ],
               ),
             ),
     );
   }
 }
-
-

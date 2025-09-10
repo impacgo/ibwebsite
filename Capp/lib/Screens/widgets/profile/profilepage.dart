@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ironingboy/Screens/widgets/addresspage.dart';
+import 'package:ironingboy/Screens/widgets/referandearn.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ironingboy/Screens/widgets/personalinfo.dart';
 class _ProfileTile extends StatelessWidget {
@@ -94,17 +95,29 @@ class ProfileScreen extends StatelessWidget {
             icon: Icons.people_outline,
             title: "Refer and Earn",
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (_) => const ReferEarnPage()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ReferEarnPage()),
+              );
             },
           ),
           _ProfileTile(
             icon: Icons.settings_outlined,
             title: "App Settings",
             onTap: () {
-              
+              Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => Scaffold(
+      appBar: AppBar(
+        title: const Text("App Settings"),
+      ),
+      body: const Center(
+        child: Text("Development in progress..."),
+      ),
+    ),
+  ),
+);
             },
           ),
         ],
@@ -185,49 +198,51 @@ class _SupportFeedbackScreenState extends State<SupportFeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          "Support & Feedback",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-            color: Colors.black,
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: const Text(
+            "Support & Feedback",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+              color: Colors.black,
+            ),
           ),
         ),
-      ),
-      backgroundColor: Colors.grey.shade100,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              _buildExpansionTile(
-                0,
-                "Rating & Feedback",
-                _buildRatingFeedbackForm(),
-              ),
-              const SizedBox(height: 8),
-              _buildExpansionTile(
-                1,
-                "FAQ's",
-                const _FaqSection(),
-              ),
-              const SizedBox(height: 8),
-              _buildExpansionTile(
-                2,
-                "Contact Support",
-                const _ContactSupportSection(),
-              ),
-            ],
+        backgroundColor: Colors.grey.shade100,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                _buildExpansionTile(
+                  0,
+                  "Rating & Feedback",
+                  _buildRatingFeedbackForm(),
+                ),
+                const SizedBox(height: 8),
+                _buildExpansionTile(
+                  1,
+                  "FAQ's",
+                  const _FaqSection(),
+                ),
+                const SizedBox(height: 8),
+                _buildExpansionTile(
+                  2,
+                  "Contact Support",
+                  const _ContactSupportSection(),
+                ),
+              ],
+            ),
           ),
         ),
       ),
