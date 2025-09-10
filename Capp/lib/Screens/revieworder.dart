@@ -208,422 +208,424 @@ class _ReviewOrderPageState extends State<ReviewOrderPage> {
         ),
         centerTitle: true,
       ),
-      body: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          if (state is CartUpdated && state.items.isNotEmpty) {
-            final items = state.items;
-            final subtotal = items.fold<double>(0, (sum, e) => sum + e.totalPrice);
-            final driverTip = widget.tip ?? 0;
-            final total = subtotal + driverTip;
-
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...items.map((item) => ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(item.name,
-                            style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: "Poppins")),
-                        subtitle: Text("${item.qty} × ${item.price}"),
-                        trailing: Text(
-                          "£${item.totalPrice.toStringAsFixed(2)}",
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: "Poppins"),
-                        ),
-                      )),
-                  const Divider(),
-                  _buildSummaryRow("Sub Total", "£${subtotal.toStringAsFixed(2)}"),
-                  _buildSummaryRow("Driver Tip", "£${driverTip.toStringAsFixed(2)}"),
-                  const Divider(),
-                  _buildSummaryRow("Total Amount", "£${total.toStringAsFixed(2)}", isBold: true, highlight: true),
-
-                  BlocBuilder<CartExtraBloc, CartExtraState>(builder: (context, extraState) {
-                    final notes = extraState.notes;
-                    final images = extraState.imagePaths;
-
-                    final hasNotes = notes != null && notes.trim().isNotEmpty;
-                    final hasImages = images.isNotEmpty;
-
-                    if (!hasNotes && !hasImages) {
-                      return const SizedBox.shrink();
-                    }
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildSectionTitle("Special Instructions"),
-                        Card(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (hasNotes) ...[
-                                  Text(
-                                    notes!,
-                                    style: const TextStyle(fontFamily: "Poppins"),
-                                  ),
-                                ],
-                                if (hasNotes && hasImages) const SizedBox(height: 8),
-                                if (hasImages)
-                                  SizedBox(
-                                    height: 110,
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: images.length,
-                                      separatorBuilder: (_, __) => const SizedBox(width: 8),
-                                      itemBuilder: (context, index) {
-                                        final path = images[index];
-                                        return GestureDetector(
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (_) => Dialog(
-                                                child: InteractiveViewer(
-                                                  child: Image.file(File(path), fit: BoxFit.contain),
+      body: SafeArea(
+        child: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            if (state is CartUpdated && state.items.isNotEmpty) {
+              final items = state.items;
+              final subtotal = items.fold<double>(0, (sum, e) => sum + e.totalPrice);
+              final driverTip = widget.tip ?? 0;
+              final total = subtotal + driverTip;
+            
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ...items.map((item) => ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(item.name,
+                              style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: "Poppins")),
+                          subtitle: Text("${item.qty} × ${item.price}"),
+                          trailing: Text(
+                            "£${item.totalPrice.toStringAsFixed(2)}",
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: "Poppins"),
+                          ),
+                        )),
+                    const Divider(),
+                    _buildSummaryRow("Sub Total", "£${subtotal.toStringAsFixed(2)}"),
+                    _buildSummaryRow("Driver Tip", "£${driverTip.toStringAsFixed(2)}"),
+                    const Divider(),
+                    _buildSummaryRow("Total Amount", "£${total.toStringAsFixed(2)}", isBold: true, highlight: true),
+            
+                    BlocBuilder<CartExtraBloc, CartExtraState>(builder: (context, extraState) {
+                      final notes = extraState.notes;
+                      final images = extraState.imagePaths;
+            
+                      final hasNotes = notes != null && notes.trim().isNotEmpty;
+                      final hasImages = images.isNotEmpty;
+            
+                      if (!hasNotes && !hasImages) {
+                        return const SizedBox.shrink();
+                      }
+            
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildSectionTitle("Special Instructions"),
+                          Card(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (hasNotes) ...[
+                                    Text(
+                                      notes!,
+                                      style: const TextStyle(fontFamily: "Poppins"),
+                                    ),
+                                  ],
+                                  if (hasNotes && hasImages) const SizedBox(height: 8),
+                                  if (hasImages)
+                                    SizedBox(
+                                      height: 110,
+                                      child: ListView.separated(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: images.length,
+                                        separatorBuilder: (_, __) => const SizedBox(width: 8),
+                                        itemBuilder: (context, index) {
+                                          final path = images[index];
+                                          return GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (_) => Dialog(
+                                                  child: InteractiveViewer(
+                                                    child: Image.file(File(path), fit: BoxFit.contain),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(8),
+                                              child: Container(
+                                                width: 100,
+                                                height: 100,
+                                                color: Colors.grey.shade200,
+                                                child: Image.file(
+                                                  File(path),
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context, error, stackTrace) {
+                                                    return const Center(child: Icon(Icons.broken_image));
+                                                  },
                                                 ),
                                               ),
-                                            );
-                                          },
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(8),
-                                            child: Container(
-                                              width: 100,
-                                              height: 100,
-                                              color: Colors.grey.shade200,
-                                              child: Image.file(
-                                                File(path),
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error, stackTrace) {
-                                                  return const Center(child: Icon(Icons.broken_image));
-                                                },
-                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
-                  }),
-
-                  const SizedBox(height: 16),
-                  _buildSectionTitle("Slots"),
-                  Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    child: ListTile(
-                      leading: const Icon(Icons.calendar_today, color: Colors.blue),
-                      title: const Text("Pickup"),
-                      subtitle: Text(widget.collect),
+                        ],
+                      );
+                    }),
+            
+                    const SizedBox(height: 16),
+                    _buildSectionTitle("Slots"),
+                    Card(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      child: ListTile(
+                        leading: const Icon(Icons.calendar_today, color: Colors.blue),
+                        title: const Text("Pickup"),
+                        subtitle: Text(widget.collect),
+                      ),
                     ),
-                  ),
-                  Card(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    child: ListTile(
-                      leading: const Icon(Icons.calendar_today, color: Colors.blue),
-                      title: const Text("Dropoff"),
-                      subtitle: Text(widget.delivery),
+                    Card(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      child: ListTile(
+                        leading: const Icon(Icons.calendar_today, color: Colors.blue),
+                        title: const Text("Dropoff"),
+                        subtitle: Text(widget.delivery),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildSectionTitle("Address"),
-                  _loadingAddress
-                      ? const Center(child: CircularProgressIndicator())
-                      : _savedAddresses.isEmpty
-                          ? const Text("No saved addresses found.")
-                          : Column(
-                              children: _savedAddresses.map((addr) {
-                                final int? addrId = _toInt(addr['address_id']);
-                                if (addrId == null) return const SizedBox.shrink();
-                                
-                                return Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                  child: RadioListTile<int>(
-                                    value: addrId,
-                                    groupValue: _selectedAddressId,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        _selectedAddressId = val;
-                                      });
-                                    },
-                                    title: Text(
-                                      (addr['name']?.toString().isNotEmpty == true)
-                                          ? addr['name'].toString()
-                                          : "No name",
-                                      style: const TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w600),
-                                    ),
-                                    subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        if (addr['phone']?.toString().isNotEmpty == true)
+                    const SizedBox(height: 16),
+                    _buildSectionTitle("Address"),
+                    _loadingAddress
+                        ? const Center(child: CircularProgressIndicator())
+                        : _savedAddresses.isEmpty
+                            ? const Text("No saved addresses found.")
+                            : Column(
+                                children: _savedAddresses.map((addr) {
+                                  final int? addrId = _toInt(addr['address_id']);
+                                  if (addrId == null) return const SizedBox.shrink();
+                                  
+                                  return Card(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                    child: RadioListTile<int>(
+                                      value: addrId,
+                                      groupValue: _selectedAddressId,
+                                      onChanged: (val) {
+                                        setState(() {
+                                          _selectedAddressId = val;
+                                        });
+                                      },
+                                      title: Text(
+                                        (addr['name']?.toString().isNotEmpty == true)
+                                            ? addr['name'].toString()
+                                            : "No name",
+                                        style: const TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w600),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          if (addr['phone']?.toString().isNotEmpty == true)
+                                            Text(
+                                              addr['phone'].toString(),
+                                              style: const TextStyle(fontFamily: "Poppins"),
+                                            ),
                                           Text(
-                                            addr['phone'].toString(),
+                                            "${addr['full_address'] ?? ''}, ${addr['pincode'] ?? ''}",
                                             style: const TextStyle(fontFamily: "Poppins"),
                                           ),
-                                        Text(
-                                          "${addr['full_address'] ?? ''}, ${addr['pincode'] ?? ''}",
-                                          style: const TextStyle(fontFamily: "Poppins"),
-                                        ),
-                                        if (addr['address_type']?.toString().isNotEmpty == true)
-                                          Text(
-                                            (addr['address_type']?.toString().isNotEmpty == true)
-                                                ? addr['address_type'].toString()
-                                                : "Address",
-                                            style: const TextStyle(fontFamily: "Poppins"),
-                                          ),
-                                      ],
+                                          if (addr['address_type']?.toString().isNotEmpty == true)
+                                            Text(
+                                              (addr['address_type']?.toString().isNotEmpty == true)
+                                                  ? addr['address_type'].toString()
+                                                  : "Address",
+                                              style: const TextStyle(fontFamily: "Poppins"),
+                                            ),
+                                        ],
+                                      ),
+                                      secondary: _getIconForAddressType(addr['address_type']?.toString()),
                                     ),
-                                    secondary: _getIconForAddressType(addr['address_type']?.toString()),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-  width: double.infinity,
-  child: ElevatedButton(
-    onPressed: () async {
-      if (_selectedAddressId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please select an address first")),
-        );
-        return;
-      }
-
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('jwtToken');
-
-      if (token == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Not authenticated")),
-        );
-        return;
-      }
-
-      final selectedAddress = _savedAddresses.firstWhere(
-        (addr) => _toInt(addr['address_id']) == _selectedAddressId,
-        orElse: () => {},
-      );
-
-      if (selectedAddress is! Map<String, dynamic> || _toInt(selectedAddress['address_id']) == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Selected address not found. Please reselect.")),
-        );
-        return;
-      }
-
-      final cartExtraState = context.read<CartExtraBloc>().state;
-      final notes = cartExtraState.notes;
-      final images = cartExtraState.imagePaths;
-
-      final itemsPayload = items.map((e) => {
-            "product_id": e.id,
-            "quantity": e.qty,
-            "price_at_purchase": e.price,
-          }).toList();
-
-      final orderPayload = {
-        "address_id": _toInt(selectedAddress['address_id']),
-        "items": itemsPayload,
-        "subtotal": subtotal,
-        "tip": widget.tip ?? 0,
-        "total": total,
-        "collect_slot": widget.collect,
-        "delivery_slot": widget.delivery,
-        "notes": notes,
-        "images": images,
-      };
-
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => const Center(child: CircularProgressIndicator()),
-      );
-
-      try {
-        final response = await http.post(
-          Uri.parse('${base.baseUrl}/orders'),
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
-          },
-          body: json.encode(orderPayload),
-        );
-
-        Navigator.of(context).pop();
-
-        if (response.statusCode == 201) {
-          context.read<CartBloc>().add(ClearCart());
-          context.read<CartExtraBloc>().add(ClearExtras());
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => PaymentScreen(amount: total)),
-          );
-        } else {
+                                  );
+                                }).toList(),
+                              ),
+                    const SizedBox(height: 30),
+                    SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+            onPressed: () async {
+        if (_selectedAddressId == null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Failed to create order: ${response.body}")),
+            const SnackBar(content: Text("Please select an address first")),
           );
+          return;
         }
-      } catch (e) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error placing order: $e")),
+            
+        final prefs = await SharedPreferences.getInstance();
+        final token = prefs.getString('jwtToken');
+            
+        if (token == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Not authenticated")),
+          );
+          return;
+        }
+            
+        final selectedAddress = _savedAddresses.firstWhere(
+          (addr) => _toInt(addr['address_id']) == _selectedAddressId,
+          orElse: () => {},
         );
-      }
-    },
-    style: ElevatedButton.styleFrom(
-      padding: EdgeInsets.zero, // 🔑 remove default padding
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      backgroundColor: Colors.transparent, // 🔑 transparent to show gradient
-      shadowColor: Colors.transparent,
-    ),
-    child: Ink(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFF8B500), Color(0xFFF57C00)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: const Text(
-          "Confirm Order",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
-            color: Colors.white,
-          ),
-        ),
-      ),
-    ),
-  ),
-),
-
-                  // SizedBox(
-                  //   width: double.infinity,
-                  //   child: ElevatedButton(
-                  //     style: ElevatedButton.styleFrom(
-                  //       backgroundColor: Colors.orange,
-                  //       padding: const EdgeInsets.symmetric(vertical: 16),
-                  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  //     ),
-                  //     onPressed: () async {
-                  //       if (_selectedAddressId == null) {
-                  //         ScaffoldMessenger.of(context).showSnackBar(
-                  //           const SnackBar(content: Text("Please select an address first")),
-                  //         );
-                  //         return;
-                  //       }
-
-                  //       final prefs = await SharedPreferences.getInstance();
-                  //       final token = prefs.getString('jwtToken');
-
-                  //       if (token == null) {
-                  //         ScaffoldMessenger.of(context).showSnackBar(
-                  //           const SnackBar(content: Text("Not authenticated")),
-                  //         );
-                  //         return;
-                  //       }
-
-                  //       final selectedAddress = _savedAddresses.firstWhere(
-                  //         (addr) => _toInt(addr['address_id']) == _selectedAddressId,
-                  //         orElse: () => {},
-                  //       );
-
-                  //       if (selectedAddress is! Map<String, dynamic> || _toInt(selectedAddress['address_id']) == null) {
-                  //         ScaffoldMessenger.of(context).showSnackBar(
-                  //           const SnackBar(content: Text("Selected address not found. Please reselect.")),
-                  //         );
-                  //         return;
-                  //       }
-
-                  //       final cartExtraState = context.read<CartExtraBloc>().state;
-                  //       final notes = cartExtraState.notes;
-                  //       final images = cartExtraState.imagePaths;
-
-                  //       final itemsPayload = items.map((e) => {
-                  //             "product_id": e.id,
-                  //             "quantity": e.qty,
-                  //             "price_at_purchase": e.price,
-                  //           }).toList();
-
-                  //       final orderPayload = {
-                  //         "address_id": _toInt(selectedAddress['address_id']),
-                  //         "items": itemsPayload,
-                  //         "subtotal": subtotal,
-                  //         "tip": widget.tip ?? 0,
-                  //         "total": total,
-                  //         "collect_slot": widget.collect,
-                  //         "delivery_slot": widget.delivery,
-                  //         "notes": notes,
-                  //         "images": images,
-                  //       };
-
-                  //       showDialog(
-                  //         context: context,
-                  //         barrierDismissible: false,
-                  //         builder: (_) => const Center(child: CircularProgressIndicator()),
-                  //       );
-
-                  //       try {
-                  //         final response = await http.post(
-                  //           Uri.parse('${base.baseUrl}/orders'),
-                  //           headers: {
-                  //             'Content-Type': 'application/json',
-                  //             'Authorization': 'Bearer $token',
-                  //           },
-                  //           body: json.encode(orderPayload),
-                  //         );
-
-                  //         Navigator.of(context).pop();
-
-                  //         if (response.statusCode == 201) {
-                  //           context.read<CartBloc>().add(ClearCart());
-                  //           context.read<CartExtraBloc>().add(ClearExtras());
-                  //           Navigator.push(
-                  //             context,
-                  //             MaterialPageRoute(builder: (_) => PaymentScreen(amount: total)),
-                  //           );
-                  //         } else {
-                  //           ScaffoldMessenger.of(context).showSnackBar(
-                  //             SnackBar(content: Text("Failed to create order: ${response.body}")),
-                  //           );
-                  //         }
-                  //       } catch (e) {
-                  //         Navigator.of(context).pop();
-                  //         ScaffoldMessenger.of(context).showSnackBar(
-                  //           SnackBar(content: Text("Error placing order: $e")),
-                  //         );
-                  //       }
-                  //     },
-                  //     child: const Text(
-                  //       "Confirm Order",
-                  //       style: TextStyle(
-                  //           fontSize: 16, fontWeight: FontWeight.w600, fontFamily: "Poppins", color: Colors.white),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
+            
+        if (selectedAddress is! Map<String, dynamic> || _toInt(selectedAddress['address_id']) == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Selected address not found. Please reselect.")),
+          );
+          return;
+        }
+            
+        final cartExtraState = context.read<CartExtraBloc>().state;
+        final notes = cartExtraState.notes;
+        final images = cartExtraState.imagePaths;
+            
+        final itemsPayload = items.map((e) => {
+              "product_id": e.id,
+              "quantity": e.qty,
+              "price_at_purchase": e.price,
+            }).toList();
+            
+        final orderPayload = {
+          "address_id": _toInt(selectedAddress['address_id']),
+          "items": itemsPayload,
+          "subtotal": subtotal,
+          "tip": widget.tip ?? 0,
+          "total": total,
+          "collect_slot": widget.collect,
+          "delivery_slot": widget.delivery,
+          "notes": notes,
+          "images": images,
+        };
+            
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => const Center(child: CircularProgressIndicator()),
+        );
+            
+        try {
+          final response = await http.post(
+            Uri.parse('${base.baseUrl}/orders'),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+            body: json.encode(orderPayload),
+          );
+            
+          Navigator.of(context).pop();
+            
+          if (response.statusCode == 201) {
+            context.read<CartBloc>().add(ClearCart());
+            context.read<CartExtraBloc>().add(ClearExtras());
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => PaymentScreen(amount: total)),
             );
           } else {
-            return const Center(
-              child: Text("Your cart is empty"),
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Failed to create order: ${response.body}")),
             );
           }
-        },
+        } catch (e) {
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Error placing order: $e")),
+          );
+        }
+            },
+            style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.zero, // 🔑 remove default padding
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        backgroundColor: Colors.transparent, // 🔑 transparent to show gradient
+        shadowColor: Colors.transparent,
+            ),
+            child: Ink(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFF8B500), Color(0xFFF57C00)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: const Text(
+            "Confirm Order",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Poppins",
+              color: Colors.white,
+            ),
+          ),
+        ),
+            ),
+        ),
+            ),
+            
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   child: ElevatedButton(
+                    //     style: ElevatedButton.styleFrom(
+                    //       backgroundColor: Colors.orange,
+                    //       padding: const EdgeInsets.symmetric(vertical: 16),
+                    //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    //     ),
+                    //     onPressed: () async {
+                    //       if (_selectedAddressId == null) {
+                    //         ScaffoldMessenger.of(context).showSnackBar(
+                    //           const SnackBar(content: Text("Please select an address first")),
+                    //         );
+                    //         return;
+                    //       }
+            
+                    //       final prefs = await SharedPreferences.getInstance();
+                    //       final token = prefs.getString('jwtToken');
+            
+                    //       if (token == null) {
+                    //         ScaffoldMessenger.of(context).showSnackBar(
+                    //           const SnackBar(content: Text("Not authenticated")),
+                    //         );
+                    //         return;
+                    //       }
+            
+                    //       final selectedAddress = _savedAddresses.firstWhere(
+                    //         (addr) => _toInt(addr['address_id']) == _selectedAddressId,
+                    //         orElse: () => {},
+                    //       );
+            
+                    //       if (selectedAddress is! Map<String, dynamic> || _toInt(selectedAddress['address_id']) == null) {
+                    //         ScaffoldMessenger.of(context).showSnackBar(
+                    //           const SnackBar(content: Text("Selected address not found. Please reselect.")),
+                    //         );
+                    //         return;
+                    //       }
+            
+                    //       final cartExtraState = context.read<CartExtraBloc>().state;
+                    //       final notes = cartExtraState.notes;
+                    //       final images = cartExtraState.imagePaths;
+            
+                    //       final itemsPayload = items.map((e) => {
+                    //             "product_id": e.id,
+                    //             "quantity": e.qty,
+                    //             "price_at_purchase": e.price,
+                    //           }).toList();
+            
+                    //       final orderPayload = {
+                    //         "address_id": _toInt(selectedAddress['address_id']),
+                    //         "items": itemsPayload,
+                    //         "subtotal": subtotal,
+                    //         "tip": widget.tip ?? 0,
+                    //         "total": total,
+                    //         "collect_slot": widget.collect,
+                    //         "delivery_slot": widget.delivery,
+                    //         "notes": notes,
+                    //         "images": images,
+                    //       };
+            
+                    //       showDialog(
+                    //         context: context,
+                    //         barrierDismissible: false,
+                    //         builder: (_) => const Center(child: CircularProgressIndicator()),
+                    //       );
+            
+                    //       try {
+                    //         final response = await http.post(
+                    //           Uri.parse('${base.baseUrl}/orders'),
+                    //           headers: {
+                    //             'Content-Type': 'application/json',
+                    //             'Authorization': 'Bearer $token',
+                    //           },
+                    //           body: json.encode(orderPayload),
+                    //         );
+            
+                    //         Navigator.of(context).pop();
+            
+                    //         if (response.statusCode == 201) {
+                    //           context.read<CartBloc>().add(ClearCart());
+                    //           context.read<CartExtraBloc>().add(ClearExtras());
+                    //           Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute(builder: (_) => PaymentScreen(amount: total)),
+                    //           );
+                    //         } else {
+                    //           ScaffoldMessenger.of(context).showSnackBar(
+                    //             SnackBar(content: Text("Failed to create order: ${response.body}")),
+                    //           );
+                    //         }
+                    //       } catch (e) {
+                    //         Navigator.of(context).pop();
+                    //         ScaffoldMessenger.of(context).showSnackBar(
+                    //           SnackBar(content: Text("Error placing order: $e")),
+                    //         );
+                    //       }
+                    //     },
+                    //     child: const Text(
+                    //       "Confirm Order",
+                    //       style: TextStyle(
+                    //           fontSize: 16, fontWeight: FontWeight.w600, fontFamily: "Poppins", color: Colors.white),
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              );
+            } else {
+              return const Center(
+                child: Text("Your cart is empty"),
+              );
+            }
+          },
+        ),
       ),
     );
   }

@@ -76,8 +76,8 @@ class _TopBarState extends State<TopBar> {
             ),
           ),
           const Spacer(),
-GestureDetector(
-  onTap: () {
+    GestureDetector(
+      onTap: () {
     Navigator.push(
       context,
       PageRouteBuilder(
@@ -94,8 +94,8 @@ GestureDetector(
         },
       ),
     );
-  },
-  child: Container(
+      },
+      child: Container(
     width: 35,  
     height: 35,
     decoration: BoxDecoration(
@@ -107,8 +107,8 @@ GestureDetector(
       backgroundColor: Colors.white,
       child: Icon(Icons.person_outline, color: Colors.black),
     ),
-  ),
-),
+      ),
+    ),
         ],
       ),
     );

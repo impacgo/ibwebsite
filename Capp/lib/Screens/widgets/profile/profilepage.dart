@@ -106,8 +106,8 @@ class ProfileScreen extends StatelessWidget {
             title: "App Settings",
             onTap: () {
               Navigator.push(
-  context,
-  MaterialPageRoute(
+      context,
+      MaterialPageRoute(
     builder: (_) => Scaffold(
       appBar: AppBar(
         title: const Text("App Settings"),
@@ -116,8 +116,8 @@ class ProfileScreen extends StatelessWidget {
         child: Text("Development in progress..."),
       ),
     ),
-  ),
-);
+      ),
+    );
             },
           ),
         ],

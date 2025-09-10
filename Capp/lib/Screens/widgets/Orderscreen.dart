@@ -98,29 +98,31 @@ class _MyOrderPageState extends State<MyOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("My Orders"),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("My Orders"),
+        ),
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : orders.isEmpty
+                ? const Center(child: Text("No orders found"))
+                : ListView.builder(
+                    itemCount: orders.length,
+                    itemBuilder: (context, index) {
+                      final order = orders[index];
+                      return Card(
+                        margin: const EdgeInsets.all(8),
+                        child: ListTile(
+                          title: Text("Order #${order['order_id']}"),
+                          subtitle: Text("Total: ₹${order['total']}"),
+                          trailing: const Icon(Icons.arrow_forward_ios),
+                          onTap: () => fetchOrderDetails(order['order_id']),
+                        ),
+                      );
+                    },
+                  ),
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : orders.isEmpty
-              ? const Center(child: Text("No orders found"))
-              : ListView.builder(
-                  itemCount: orders.length,
-                  itemBuilder: (context, index) {
-                    final order = orders[index];
-                    return Card(
-                      margin: const EdgeInsets.all(8),
-                      child: ListTile(
-                        title: Text("Order #${order['order_id']}"),
-                        subtitle: Text("Total: ₹${order['total']}"),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        onTap: () => fetchOrderDetails(order['order_id']),
-                      ),
-                    );
-                  },
-                ),
     );
   }
 }

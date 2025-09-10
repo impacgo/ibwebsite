@@ -247,9 +247,9 @@ Future<void> _saveLocation() async {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
           children: [
             GoogleMap(
               onMapCreated: (controller) => _mapController = controller,

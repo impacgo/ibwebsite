@@ -100,19 +100,19 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "My Cart",
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "My Cart",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        body: MultiBlocListener(
+      ),
+      body: SafeArea(
+        child: MultiBlocListener(
           listeners: [
             BlocListener<CartExtraBloc, CartExtraState>(
               listener: (context, state) {
@@ -365,8 +365,8 @@ class _CartPageState extends State<CartPage> {
                    Padding(
         padding: const EdgeInsets.all(12),
         child: SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
+            width: double.infinity,
+            child: ElevatedButton(
         onPressed: () {
           context.read<CartExtraBloc>().add(SaveNotes(notetaker.text));
           _proceedToCheckout(context);
@@ -402,41 +402,41 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
         ),
-      ),
+            ),
         ),
-      ),
-      
-      //                   Padding(
-      //                     padding: const EdgeInsets.all(12),
-      //                     child: SizedBox(
-      //                       width: double.infinity,
-      //                       child: ElevatedButton(
-      //   style: ElevatedButton.styleFrom(
-      //     backgroundColor: Colors.orange,
-      //     shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.circular(12),
-      //     ),
-      //     padding: const EdgeInsets.symmetric(vertical: 16),
-      //   ),
-      //   onPressed: () =>
-      //   {context.read<CartExtraBloc>().add(SaveNotes(notetaker.text)),
-      
-      //    _proceedToCheckout(context),},
-      //   child: const Text(
-      //     "Proceed to checkout",
-      //     style: TextStyle(
-      //       fontSize: 16,
-      //       fontFamily: 'Poppins',
-      //       fontWeight: FontWeight.w600,
-      //       color: Colors.white,
-      //     ),
-      //   ),
-      // ),
+            ),
+            
+            //                   Padding(
+            //                     padding: const EdgeInsets.all(12),
+            //                     child: SizedBox(
+            //                       width: double.infinity,
+            //                       child: ElevatedButton(
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: Colors.orange,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(12),
+            //     ),
+            //     padding: const EdgeInsets.symmetric(vertical: 16),
+            //   ),
+            //   onPressed: () =>
+            //   {context.read<CartExtraBloc>().add(SaveNotes(notetaker.text)),
+            
+            //    _proceedToCheckout(context),},
+            //   child: const Text(
+            //     "Proceed to checkout",
+            //     style: TextStyle(
+            //       fontSize: 16,
+            //       fontFamily: 'Poppins',
+            //       fontWeight: FontWeight.w600,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            // ),
                      
                 
-      
-      //                     ),
-      //                   ),
+            
+            //                     ),
+            //                   ),
                   ],
                 );
               } else {

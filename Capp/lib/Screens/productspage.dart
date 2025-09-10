@@ -73,7 +73,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
           ),
         ),
         body: isLoading
-            ? const Center(child: CircularProgressIndicator(color: Colors.grey))
+            ? SafeArea(child: const Center(child: CircularProgressIndicator(color: Colors.grey)))
             : Stack(
                 children: [
                   Column(

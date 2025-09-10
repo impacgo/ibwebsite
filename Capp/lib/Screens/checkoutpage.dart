@@ -344,239 +344,241 @@ class _CheckoutPageState extends State<CheckoutPage> {
           style: TextStyle(fontFamily: 'Poppins'),
         ),
       ),
-      body: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          if (state is CartUpdated && state.items.isNotEmpty) {
-            final items = state.items;
-            final grandTotal =
-                items.fold<double>(0, (sum, e) => sum + e.totalPrice);
-            final totalAmount = grandTotal + (_selectedTip ?? 0);
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ...items.map((item) => Card(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        child: ListTile(
-                          title: Text(item.name,
+      body: SafeArea(
+        child: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            if (state is CartUpdated && state.items.isNotEmpty) {
+              final items = state.items;
+              final grandTotal =
+                  items.fold<double>(0, (sum, e) => sum + e.totalPrice);
+              final totalAmount = grandTotal + (_selectedTip ?? 0);
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ...items.map((item) => Card(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          child: ListTile(
+                            title: Text(item.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Poppins')),
+                            subtitle: Text("Quantity: ${item.qty}"),
+                            trailing: Text(
+                              "£${item.totalPrice.toStringAsFixed(2)}",
                               style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins')),
-                          subtitle: Text("Quantity: ${item.qty}"),
-                          trailing: Text(
-                            "£${item.totalPrice.toStringAsFixed(2)}",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Poppins',
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Poppins',
+                              ),
                             ),
                           ),
-                        ),
-                      )),
-                  const SizedBox(height: 16),
-                  const Text("Order Summary",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.blue)),
-                  const SizedBox(height: 8),
-                  _buildSummaryRow("Sub total",
-                      "£${grandTotal.toStringAsFixed(2)}"),
-                  _buildDriverTip(),
-                  const Divider(),
-                  _buildSummaryRow("Total Amount",
-                      "£${totalAmount.toStringAsFixed(2)}",
-                      isBold: true, highlight: true),
-                  const SizedBox(height: 20),
-                  const Text("My slot",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.blue)),
-                  const SizedBox(height: 8),
-                  _buildSlotTile(
-                      context, "Collect from me", _collectDateController, true),
-                  _buildSlotTile(context, "Deliver to me", _deliverDateController, false),
-                  const SizedBox(height: 20),
-                  const Text("Address Details",
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
-                  const SizedBox(height: 8),
-                  _isLoadingAddress
-                      ? const Center(child: CircularProgressIndicator())
-                      : _addresses.isEmpty
-                          ? const Text("No saved addresses. Please add one.")
-                          : Column(
-                              children: _addresses.map((addr) {
-                                final addressType = addr['address_type'] as String?;
-                                final isSelected = _selectedAddressType == addressType;
-                                final svgPath = _getSvgPathForAddressType(addressType);
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(vertical: 6),
-                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: isSelected
-                                        ? Border.all(color: Colors.orange, width: 2)
-                                        : Border.all(color: Colors.transparent),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.05),
-                                        blurRadius: 4,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Radio<String>(
-                                        value: addressType ?? "",
-                                        groupValue: _selectedAddressType,
-                                        activeColor: Colors.orange,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedAddressType = value;
-                                          });
-                                        },
-                                      ),
-                                      const SizedBox(width: 8),
-                                      SvgPicture.asset(
-                                        svgPath,
-                                        height: 24,
-                                        width: 24,
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              (addr['name'] as String?) ?? '',
-                                              style: const TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 2),
-                                            Text(
-                                              (addr['phone'] as String?) ?? '',
-                                              style: const TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 2),
-                                            Text(
-                                              "${(addr['full_address'] as String?) ?? ''}, ${(addr['pincode'] as String?) ?? ''}",
-                                              style: const TextStyle(
-                                                fontFamily: 'Poppins',
-                                                fontSize: 13,
-                                              ),
-                                            ),
-                                          ],
+                        )),
+                    const SizedBox(height: 16),
+                    const Text("Order Summary",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.blue)),
+                    const SizedBox(height: 8),
+                    _buildSummaryRow("Sub total",
+                        "£${grandTotal.toStringAsFixed(2)}"),
+                    _buildDriverTip(),
+                    const Divider(),
+                    _buildSummaryRow("Total Amount",
+                        "£${totalAmount.toStringAsFixed(2)}",
+                        isBold: true, highlight: true),
+                    const SizedBox(height: 20),
+                    const Text("My slot",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.blue)),
+                    const SizedBox(height: 8),
+                    _buildSlotTile(
+                        context, "Collect from me", _collectDateController, true),
+                    _buildSlotTile(context, "Deliver to me", _deliverDateController, false),
+                    const SizedBox(height: 20),
+                    const Text("Address Details",
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+                    const SizedBox(height: 8),
+                    _isLoadingAddress
+                        ? const Center(child: CircularProgressIndicator())
+                        : _addresses.isEmpty
+                            ? const Text("No saved addresses. Please add one.")
+                            : Column(
+                                children: _addresses.map((addr) {
+                                  final addressType = addr['address_type'] as String?;
+                                  final isSelected = _selectedAddressType == addressType;
+                                  final svgPath = _getSvgPathForAddressType(addressType);
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(vertical: 6),
+                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: isSelected
+                                          ? Border.all(color: Colors.orange, width: 2)
+                                          : Border.all(color: Colors.transparent),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.05),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Radio<String>(
+                                          value: addressType ?? "",
+                                          groupValue: _selectedAddressType,
+                                          activeColor: Colors.orange,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _selectedAddressType = value;
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(width: 8),
+                                        SvgPicture.asset(
+                                          svgPath,
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                (addr['name'] as String?) ?? '',
+                                                style: const TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                (addr['phone'] as String?) ?? '',
+                                                style: const TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                "${(addr['full_address'] as String?) ?? ''}, ${(addr['pincode'] as String?) ?? ''}",
+                                                style: const TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 13,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Change laundry",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16)),
+                        Switch(
+                          value: _changeLaundry,
+                          onChanged: (val) {
+                            setState(() {
+                              _changeLaundry = val;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              side: const BorderSide(color: Colors.orange),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Back to service",
+                                style: TextStyle(color: Colors.orange,fontWeight: FontWeight.w600)),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              backgroundColor: Colors.orange,
+                              foregroundColor: Colors.white,
+                             
+                            ),
+                            onPressed: () {
+                              if (_collectDate == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Please select a collection date."),
                                   ),
                                 );
-                              }).toList(),
-                            ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Change laundry",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16)),
-                      Switch(
-                        value: _changeLaundry,
-                        onChanged: (val) {
-                          setState(() {
-                            _changeLaundry = val;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            side: const BorderSide(color: Colors.orange),
+                                return;
+                              }
+                              if (_selectedCollectTimeSlot == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Please select a time slot for collection."),
+                                  ),
+                                );
+                                return;
+                              }
+                              if (_deliverDate == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Please select a delivery date."),
+                                  ),
+                                );
+                                return;
+                              }
+                              if (_selectedDeliverTimeSlot == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Please select a time slot for delivery."),
+                                  ),
+                                );
+                                return;
+                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ReviewOrderPage(
+                                    collect: _collectDateController.text,
+                                    delivery: _deliverDateController.text,
+                                    tip: _selectedTip,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text("Review & Confirm"),
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Back to service",
-                              style: TextStyle(color: Colors.orange,fontWeight: FontWeight.w600)),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: Colors.orange,
-                            foregroundColor: Colors.white,
-                           
-                          ),
-                          onPressed: () {
-                            if (_collectDate == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please select a collection date."),
-                                ),
-                              );
-                              return;
-                            }
-                            if (_selectedCollectTimeSlot == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please select a time slot for collection."),
-                                ),
-                              );
-                              return;
-                            }
-                            if (_deliverDate == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please select a delivery date."),
-                                ),
-                              );
-                              return;
-                            }
-                            if (_selectedDeliverTimeSlot == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please select a time slot for delivery."),
-                                ),
-                              );
-                              return;
-                            }
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ReviewOrderPage(
-                                  collect: _collectDateController.text,
-                                  delivery: _deliverDateController.text,
-                                  tip: _selectedTip,
-                                ),
-                              ),
-                            );
-                          },
-                          child: const Text("Review & Confirm"),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          }
-          return const Center(child: Text("Cart is empty"));
-        },
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const Center(child: Text("Cart is empty"));
+          },
+        ),
       ),
     );
   }

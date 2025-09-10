@@ -233,206 +233,183 @@ class _LaundryChatScreenState extends State<LaundryChatScreen> {
   Widget build(BuildContext context) {
     final maxBubbleWidth = MediaQuery.of(context).size.width * 0.72;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F5),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1,
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text("IroningBoy Support",
-                style: TextStyle(color: Colors.black, fontSize: 16)),
-            SizedBox(height: 2),
-            Text("CamdenTown, London",
-                style: TextStyle(color: Colors.grey, fontSize: 12)),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF2F2F5),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 1,
+          leading: const Icon(Icons.arrow_back, color: Colors.black),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text("IroningBoy Support",
+                  style: TextStyle(color: Colors.black, fontSize: 16)),
+              SizedBox(height: 2),
+              Text("CamdenTown, London",
+                  style: TextStyle(color: Colors.grey, fontSize: 12)),
+            ],
+          ),
+          actions: [
+      
           ],
+          iconTheme: const IconThemeData(color: Colors.black),
         ),
-        actions: [
-
-        ],
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // messages list
-            Expanded(
-              child: ListView.builder(
-                controller: _messagesController,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                itemCount: _messages.length,
-                itemBuilder: (context, index) {
-                  final msg = _messages[index];
-                  final isUser = msg["sender"] == "user";
-
-                  if (msg["type"] == "order") {
-                    return Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        child: _buildOrderCard(msg),
-                      ),
-                    );
-                  }
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment:
-                          isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-                      children: [
-                        if (!isUser) ...[
-                          // bot avatar
-                          Container(
-                            margin: const EdgeInsets.only(right: 8),
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Icon(Icons.smart_toy, size: 20, color: Colors.black54),
-                          ),
-                        ],
-                        ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: maxBubbleWidth),
-                          child: Column(
-                            crossAxisAlignment: isUser
-                                ? CrossAxisAlignment.end
-                                : CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 14),
-                                decoration: BoxDecoration(
-                                  color: isUser ? const Color(0xFF111827) : Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(isUser ? 16 : 6),
-                                    topRight: Radius.circular(isUser ? 6 : 16),
-                                    bottomLeft: const Radius.circular(16),
-                                    bottomRight: const Radius.circular(16),
-                                  ),
-                                  boxShadow: [
-                                    if (!isUser)
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.03),
-                                        blurRadius: 6,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                  ],
-                                ),
-                                child: Text(
-                                  msg["text"] ?? "",
-                                  style: TextStyle(
-                                    color: isUser ? Colors.white : Colors.black87,
-                                    fontSize: 14,
-                                    height: 1.2,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              // timestamp
-                              Text(
-                                msg["time"] ?? "",
-                                style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize: 11,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        if (isUser) const SizedBox(width: 8),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // quick messages horizontal scroll with scrollbar
-            Container(
-              color: Colors.transparent,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Scrollbar(
-                controller: _quickScrollController,
-                thumbVisibility: true,
-                radius: const Radius.circular(10),
-                child: SingleChildScrollView(
-                  controller: _quickScrollController,
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: _quickMessages.map((label) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        child: GestureDetector(
-                          onTap: () {
-                            if (label == "Order Status") {
-                              _showOrderListSheet();
-                            } else {
-                              _sendMessage(label);
-                            }
-                          },
-                          child: Container(
-                            constraints: const BoxConstraints(minHeight: 36),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.03),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                                child: Text(
-                              label,
-                              style: const TextStyle(fontSize: 13),
-                            )),
-                          ),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  controller: _messagesController,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  itemCount: _messages.length,
+                  itemBuilder: (context, index) {
+                    final msg = _messages[index];
+                    final isUser = msg["sender"] == "user";
+                    if (msg["type"] == "order") {
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: _buildOrderCard(msg),
                         ),
                       );
-                    }).toList(),
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment:
+                            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+                        children: [
+                          if (!isUser) ...[
+                            Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(Icons.smart_toy, size: 20, color: Colors.black54),
+                            ),
+                          ],
+                          ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: maxBubbleWidth),
+                            child: Column(
+                              crossAxisAlignment: isUser
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 14),
+                                  decoration: BoxDecoration(
+                                    color: isUser ? const Color(0xFF111827) : Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(isUser ? 16 : 6),
+                                      topRight: Radius.circular(isUser ? 6 : 16),
+                                      bottomLeft: const Radius.circular(16),
+                                      bottomRight: const Radius.circular(16),
+                                    ),
+                                    boxShadow: [
+                                      if (!isUser)
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.03),
+                                          blurRadius: 6,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                    ],
+                                  ),
+                                  child: Text(
+                                    msg["text"] ?? "",
+                                    style: TextStyle(
+                                      color: isUser ? Colors.white : Colors.black87,
+                                      fontSize: 14,
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                // timestamp
+                                Text(
+                                  msg["time"] ?? "",
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontSize: 11,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          if (isUser) const SizedBox(width: 8),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Container(
+                color: Colors.transparent,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child: Scrollbar(
+                  controller: _quickScrollController,
+                  thumbVisibility: true,
+                  radius: const Radius.circular(10),
+                  child: SingleChildScrollView(
+                    controller: _quickScrollController,
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _quickMessages.map((label) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (label == "Order Status") {
+                                _showOrderListSheet();
+                              } else {
+                                _sendMessage(label);
+                              }
+                            },
+                            child: Container(
+                              constraints: const BoxConstraints(minHeight: 36),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.03),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                  child: Text(
+                                label,
+                                style: const TextStyle(fontSize: 13),
+                              )),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
               ),
-            ),
-
-            // message input area
-            Container(
-              color: Colors.transparent,
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 18),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(Icons.attachment, color: Colors.black54),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+      
+              Container(
+                color: Colors.transparent,
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 18),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(26),
+                        shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.03),
@@ -441,39 +418,57 @@ class _LaundryChatScreenState extends State<LaundryChatScreen> {
                           ),
                         ],
                       ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _controller,
-                              decoration: const InputDecoration(
-                                hintText: "Message",
-                                border: InputBorder.none,
-                                isDense: true,
-                              ),
-                              onSubmitted: (v) => _sendMessage(v),
+                      child: const Icon(Icons.attachment, color: Colors.black54),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(26),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.03),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () => _sendMessage(_controller.text),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFF7A18),
-                                shape: BoxShape.circle,
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _controller,
+                                decoration: const InputDecoration(
+                                  hintText: "Message",
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                ),
+                                onSubmitted: (v) => _sendMessage(v),
                               ),
-                              child: const Icon(Icons.arrow_upward,
-                                  color: Colors.white, size: 18),
                             ),
-                          ),
-                        ],
+                            GestureDetector(
+                              onTap: () => _sendMessage(_controller.text),
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFF7A18),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(Icons.arrow_upward,
+                                    color: Colors.white, size: 18),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

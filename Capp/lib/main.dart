@@ -136,11 +136,9 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.white12,
+          seedColor: Colors.white,
         ),
-        
         fontFamily: 'Poppins',
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
