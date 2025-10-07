@@ -1,9 +1,12 @@
 // src/components/Footer.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Footer.css';
+import logo from "../images/logo1.svg";
 
 const Footer = () => {
   const [email, setEmail] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,9 +16,56 @@ const Footer = () => {
     }
   };
 
+  const handleGetApp = () => {
+    navigate('/coming-soon', {
+      state: {
+        title: "Mobile App Coming Soon",
+        description: "Our mobile app is under development. Get ready for an amazing on-the-go laundry experience!",
+        featureName: "Mobile Application",
+        expectedTime: "Q2 2025"
+      }
+    });
+  };
+
   return (
     <footer className="footer">
       <div className="footer-container">
+        {/* App Download Section */}
+        <div className="app-download-section">
+          <div className="app-content">
+            <div className="app-text">
+              <h3>Get the Ironing Boy App</h3>
+              <p>Download our app for faster booking, order tracking, and exclusive offers</p>
+              <div className="app-buttons">
+                <button className="app-btn android-btn" onClick={handleGetApp}>
+                  <i className="fab fa-google-play"></i>
+                  <div className="btn-text">
+                    <span className="get-on">GET IT ON</span>
+                    <span className="store-name">Google Play</span>
+                  </div>
+                </button>
+                <button className="app-btn apple-btn" onClick={handleGetApp}>
+                  <i className="fab fa-apple"></i>
+                  <div className="btn-text">
+                    <span className="download-on">Download on the</span>
+                    <span className="store-name">App Store</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div className="app-illustration">
+              <div className="phone-mockup">
+                <div className="phone-screen">
+                  <div className="app-preview">
+                    <div className="app-icon"><img src={logo} style={{height:"70px",width:"70px",borderRadius:"25%"}}/></div>
+                    <span>Ironing Boy</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Main Footer Content */}
         <div className="footer-main">
           <div className="footer-brand">

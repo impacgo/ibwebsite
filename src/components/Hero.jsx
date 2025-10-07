@@ -117,8 +117,8 @@ const Hero = () => {
           </p>
 
           {/* Enhanced Interactive Location Finder */}
-          <div className="location-finder highlighted">
-            <div className="finder-header">
+          <div className="location-finder highlighted" style={{animation:"none"}}>
+            <div className="finder-header" style={{animation:"none"}}>
               <i className="fas fa-crosshairs"></i>
               <span>Find Service in Your Area</span>
             </div>
@@ -155,6 +155,10 @@ const Hero = () => {
               <div className="trust-icon">🛡️</div>
               <span>Quality Guarantee</span>
             </div>
+            <div className="trust-item">
+              <div className="trust-icon">💸</div>
+              <span>Minimum charges £20</span>
+            </div>
           </div>
         </div>
 
@@ -190,31 +194,25 @@ const Hero = () => {
 
       {/* Bottom Stats Bar */}
       <div className="stats-bar">
-        <div className="stat">
+        <div className="stat" style={{background:"none", border:"none"}}>
           <div className="stat-number">50K+</div>
           <div className="stat-label">Items Cleaned</div>
         </div>
-        <div className="stat">
+        <div className="stat" style={{background:"none", border:"none"}}>
           <div className="stat-number">4.9★</div>
           <div className="stat-label">Customer Rating</div>
         </div>
-        <div className="stat">
+        <div className="stat" style={{background:"none", border:"none"}}>
           <div className="stat-number">24/7</div>
           <div className="stat-label">Support</div>
         </div>
-        <div className="stat">
+        <div className="stat" style={{background:"none", border:"none"}}>
           <div className="stat-number">98%</div>
           <div className="stat-label">On Time</div>
         </div>
       </div>
 
-      {/* Animated Scroll Indicator */}
-      <div className="smart-scroll-indicator">
-        <div className="scroll-text">Discover More</div>
-        <div className="scroll-animation">
-          <div className="scroll-dot"></div>
-        </div>
-      </div>
+      
     </section>
   );
 };

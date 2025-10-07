@@ -1,5 +1,6 @@
 // src/components/HowItWorks.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./HowItWorks.css";
 
 const steps = [
@@ -29,7 +30,39 @@ const steps = [
   }
 ];
 
+const pricingFeatures = [
+  {
+    icon: "fas fa-pound-sign",
+    text: "Minimum order £20"
+  },
+  {
+    icon: "fas fa-clock",
+    text: "24-hour turnaround"
+  },
+  {
+    icon: "fas fa-truck",
+    text: "Free pickup & delivery"
+  },
+  {
+    icon: "fas fa-leaf",
+    text: "Eco-friendly products"
+  }
+];
+
 const HowItWorks = () => {
+  const navigate = useNavigate();
+
+  const handleSchedulePickup = () => {
+    navigate('/coming-soon', {
+      state: {
+        title: "Booking System Coming Soon",
+        description: "We're building an intuitive booking system to make scheduling your laundry pickup effortless and convenient.",
+        featureName: "Online Booking System",
+        expectedTime: "2-3 weeks"
+      }
+    });
+  };
+
   return (
     <section className="how-it-works" id="how-it-works">
       <div className="content-container">
@@ -45,6 +78,7 @@ const HowItWorks = () => {
             Get your laundry done in 4 easy steps. Fast, reliable, and professional service.
           </p>
         </div>
+
 
         {/* Steps Grid */}
         <div className="steps-grid">
@@ -67,12 +101,25 @@ const HowItWorks = () => {
         {/* CTA Section */}
         <div className="cta-section">
           <div className="cta-card">
-            <h3>Ready to Get Started?</h3>
-            <p>Join thousands of satisfied customers</p>
-            <button className="cta-button" style={{background:"linear-gradient(135deg, #FF6B00, #FF8C00"}}>
-              <i className="fas fa-bolt"></i>
-              Schedule Your First Pickup
-            </button>
+            <div className="cta-content">
+              <h3>Ready to Get Started?</h3>
+              <p>Join thousands of satisfied customers</p>
+              
+              <div className="pricing-reminder">
+                <div className="minimum-badge">
+                  <i className="fas fa-tag"></i>
+                  <span>Minimum Order: <strong>£20</strong></span>
+                </div>
+              </div>
+              
+              <button 
+                className="cta-button" 
+                onClick={handleSchedulePickup} style={{background:"linear-gradient(135deg, #FF8C00, #FF6B00)"}}
+              >
+                <i className="fas fa-bolt" ></i>
+                Schedule Your First Pickup
+              </button>
+            </div>
           </div>
         </div>
       </div>

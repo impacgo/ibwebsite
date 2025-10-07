@@ -198,7 +198,7 @@
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 320px) {
   .services-grid {
     grid-template-columns: 1fr; /* Switch to 1 card per row on very small screens */
   }

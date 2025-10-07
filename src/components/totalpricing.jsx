@@ -524,7 +524,7 @@ const TotalPricing = () => {
               </div>
               <div className="stat">
                 <span className="stat-number">{filteredServices.length}</span>
-                <span className="stat-label">Showing</span>
+                <span className="stat-label" style={{color:"black"}}>Showing</span>
               </div>
             </div>
           </div>

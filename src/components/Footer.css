@@ -1,4 +1,5 @@
 /* src/components/Footer.css */
+
 .footer {
   background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 100%);
   color: white;
@@ -25,6 +26,156 @@
   padding: 0 20px;
   position: relative;
   z-index: 2;
+}
+
+/* App Download Section */
+.app-download-section {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.app-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.app-text {
+  flex: 1;
+}
+
+.app-text h3 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #fff, #e3f2fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.app-text p {
+  color: #bbdefb;
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.app-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.app-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  min-width: 160px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.app-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+.android-btn {
+  background: linear-gradient(135deg, #3ddc84, #34a853);
+  color: white;
+}
+
+.apple-btn {
+  background: linear-gradient(135deg, #000000, #1d1d1f);
+  color: white;
+}
+
+.app-btn i {
+  font-size: 1.8rem;
+}
+
+.btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
+
+.get-on, .download-on {
+  font-size: 0.7rem;
+  opacity: 0.9;
+}
+
+.store-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.app-illustration {
+  flex-shrink: 0;
+}
+
+.phone-mockup {
+  width: 140px;
+  height: 280px;
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  padding: 15px 8px;
+  position: relative;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.phone-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+}
+
+.app-preview {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+}
+
+.app-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.app-preview span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Main Footer Content */
@@ -273,6 +424,16 @@
 
 /* Tablet */
 @media (max-width: 1024px) {
+  .app-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+  }
+  
+  .app-buttons {
+    justify-content: center;
+  }
+  
   .footer-main {
     grid-template-columns: 1fr;
     gap: 30px;
@@ -289,7 +450,7 @@
   }
 }
 
-/* Mobile - COMPACT DESIGN */
+/* Mobile */
 @media (max-width: 768px) {
   .footer {
     padding: 30px 0 15px;
@@ -297,6 +458,34 @@
   
   .footer-container {
     padding: 0 16px;
+  }
+  
+  .app-download-section {
+    padding: 30px 25px;
+    margin-bottom: 30px;
+  }
+  
+  .app-text h3 {
+    font-size: 1.8rem;
+  }
+  
+  .app-text p {
+    font-size: 1rem;
+  }
+  
+  .app-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .app-btn {
+    width: 200px;
+    justify-content: center;
+  }
+  
+  .phone-mockup {
+    width: 120px;
+    height: 240px;
   }
   
   .footer-main {
@@ -417,6 +606,19 @@
   
   .footer-container {
     padding: 0 12px;
+  }
+  
+  .app-download-section {
+    padding: 25px 20px;
+  }
+  
+  .app-text h3 {
+    font-size: 1.5rem;
+  }
+  
+  .phone-mockup {
+    width: 100px;
+    height: 200px;
   }
   
   .brand-title {
