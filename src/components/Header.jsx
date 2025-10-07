@@ -131,16 +131,15 @@ const Header = () => {
                   Get Our App
                 </Link>
               </li>
-              <li className="nav-item mobile-only">
+             {/* <li className="nav-item mobile-only">
                 <Link 
                   to="/login" 
                   className="nav-link login-mobile"
                   onClick={closeMenu}
                 >
                   <ProfileIcon />
-                  Login
                 </Link>
-              </li>
+              </li>*/}
             </ul>
           </nav>
 

@@ -464,6 +464,9 @@
     padding: 30px 25px;
     margin-bottom: 30px;
   }
+  .app-illustration{
+    display:none;
+  }
   
   .app-text h3 {
     font-size: 1.8rem;

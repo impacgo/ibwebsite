@@ -540,7 +540,7 @@ const TotalPricing = () => {
             <div className="modal-details">
               <div className="detail-item">
                 <strong>Price:</strong>
-                <span className="price-value">{selectedService.price}</span>
+                <span className="price-value" style={{color:"pink"}}>{selectedService.price}</span>
               </div>
               <div className="detail-item">
                 <strong>Code:</strong>
