@@ -1,9 +1,9 @@
-// src/App.js
+// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import Services from './components/Services'; // Your existing Services component
+import Services from './components/Services';
 import HowItWorks from './components/HowItWorks';
 import Pricing from './components/Pricing';
 import Testimonials from './components/Testimonials';
@@ -13,16 +13,19 @@ import Footer from './components/Footer';
 import TotalPricing from './components/totalpricing';
 import './App.css';
 import SearchResults from './components/SearchResults';
-import Login from './Login';
-import BackgroundWrapper from './components/BackgroundWrapper';
+import AuthLogin from './components/AuthLogin'; // New import
+import ComingSoon from './components/ComingSoon';
+import CareerSection from './components/CareerSection';
+import ServiceAreas from './components/ServiceAreas';
 
-// Home component that contains all your sections
+// Home component
 const Home = () => {
   return (
     <>
       <Hero />
-      <Services /> {/* This shows the compact version on home page */}
+      <Services />
       <HowItWorks />
+      <ServiceAreas/>
       <Pricing />
       <Testimonials />
       <FAQ />
@@ -32,11 +35,11 @@ const Home = () => {
   );
 };
 
-// Services page component - uses your existing Services.jsx but as full page
+// Services page component
 const ServicesPage = () => {
   return (
     <div className="page-container">
-      <Services /> {/* Your existing Services component */}
+      <Services />
       <Footer/>
     </div>
   );
@@ -52,19 +55,23 @@ const PricingPage = () => {
   );
 };
 
-// Back button component
+// Login page component
+const LoginPage = () => {
+  return <AuthLogin />;
+};
 
-
-// Placeholder components for other pages (you can enhance these later)
+// Other page components
 const HowItWorksPage = () => (
   <div className="page-container">
-    <Login />
+    <HowItWorks />
+    <Footer />
   </div>
 );
 
 const TestimonialsPage = () => (
   <div className="page-container">
     <Testimonials />
+    <Footer />
   </div>
 );
 
@@ -78,18 +85,17 @@ const FAQPage = () => (
 const ContactPage = () => (
   <div className="page-container">
     <Contact />
+    <Footer />
   </div>
 );
+
 function App() {
   return (
     <Router>
       <div className="App">
         <Header />
         <Routes>
-          {/* Home route - shows all sections */}
           <Route path="/" element={<Home />} />
-          
-          {/* Individual page routes */}
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
@@ -97,6 +103,9 @@ function App() {
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/search" element={<SearchResults />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="*" element={<ComingSoon />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
         </Routes>
       </div>
     </Router>
